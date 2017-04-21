@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Untitled Document</title>
+<script src="jquery-2.1.0.min.js"></script>
+<style type="text/css">
+body {
+	font-family: Arial, Sans-serif;	
+}
+input {
+	width: 80px;
+	height: 40px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 16px;
+	background-color: #006787;
+	color: #FDFDFD;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	-webkit-appearance: none;
+}
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$(".number").bind("click", function(e) {
+		pushed = true;
+		lastinput = $(this).val();
+	});
+	
+	var speed = 3000; // seconds between numbers in miliseconds
+	var snd = []; // array of sound files
+	
+	var allplayed = []; // array of all numbers in order played
+	var lastinput = 0;
+	var pushed = false;
+	var allinput = [];
+	
+	var counter = 0;
+	
+	for(var i=1; i <= 9; i++) { // preload all audio files.
+		var a = new Audio("audio/"+i+".wav");
+		snd.push(a);
+	}
+	
+	setInterval(function() {
+		if (pushed) { 
+			allinput.push(lastinput);
+		} else {
+			allinput.push(0);
+			lastinput = 0;
+		}
+		
+		if (counter >= 2) {
+			var check = "red";
+			var last = $(allplayed).get(-1);
+			var previous = $(allplayed).get(-2);
+			var sum = last+previous;
+			if (lastinput == sum) {
+				check = "green"; 
+			} else {
+				check = "red";
+			}
+			//$("#log").prepend("<li>Last: "+last+"; Previous: "+previous+"; Sum: "+sum+"; Pushed: "+pushed+"; Button: "+lastinput+"; Correct: "+check+"</li>").slideDown();
+			$("<li style='color: "+check+"'>Last: "+last+"; Previous: "+previous+"; Sum: "+sum+";  Input: "+lastinput+"</li>").hide().prependTo("#log").slideDown();
+			//console.log("Last: "+last+"; Previous: "+previous+"; Sum: "+sum+"; Pushed: "+pushed+"; Button: "+lastinput+"; Correct: "+check);
+		}
+		
+		var numb = Math.floor(Math.random() * 9);
+		snd[numb].play();
+		current = numb + 1;
+		allplayed.push(current);
+		
+		pushed = false;
+		counter++;
+	}, speed);
+});
+</script>
+</head>
+
+<body>
+<div>
+  <p>This is a demo implementation of Gronwall's (1977) Paced Auditory Serial Addition Test (PASAT).</p>
+  <p>If you are using an HTML5 compatible browser, you should hear a randomly picked number every 3 Seconds. <br>
+  Sum up the two numbers heard last and push the corresponding button. A log will be displayed starting with the third number.</p>
+</div>
+<div align="center">
+  <input name="button" type="button" class="number" id="button" value="1">
+  <input type="button" name="button2" class="number" id="button2" value="2">
+  <input type="button" name="button3" class="number" id="button3" value="3">
+  <input type="button" name="button4" class="number" id="button4" value="4">
+  <input type="button" name="button5" class="number" id="button5" value="5">
+  <input type="button" name="button6" class="number" id="button6" value="6">
+  <input type="button" name="button7" class="number" id="button7" value="7">
+  <input type="button" name="button8" class="number" id="button8" value="8">
+  <input type="button" name="button9" class="number" id="button9" value="9">
+  <br>
+  <input type="button" name="button10" class="number" id="button10" value="10">
+  <input type="button" name="button11" class="number" id="button11" value="11">
+  <input type="button" name="button12" class="number" id="button12" value="12">
+  <input type="button" name="button13" class="number" id="button13" value="13">
+  <input type="button" name="button14" class="number" id="button14" value="14">
+  <input type="button" name="button15" class="number" id="button15" value="15">
+  <input type="button" name="button16" class="number" id="button16" value="16">
+  <input type="button" name="button17" class="number" id="button17" value="17">
+  <input type="button" name="button18" class="number" id="button18" value="18">
+</div>
+<div id="status">
+<ul id="log">
+</ul>
+</div>
+</body>
+</html>
